@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 //------------------------------------------
 #include "Request.h"
+#include <time.h>
 
 #define MAX_LENGTH 255
 
@@ -107,6 +108,7 @@ int main(int argc, char* argv[])
 
 		/* Else the iterator is pointing to the discovered client */
 
+		srand((unsigned)time(NULL));
 		bool Failure = (rand() % 100) < 10;//may need time seed
 		
 		/* These cases compare 'R' (client request number) to 'r' (server request number) */
@@ -124,6 +126,7 @@ int main(int argc, char* argv[])
 			memcpy(&buffer, &iter->sendMsg, sizeof(iter->sendMsg));
 			cout << buffer << endl;
 			
+			srand((unsigned)time(NULL));
 			bool responseFailure = (rand() % 100) < 10;//seed by time
 			if(responseFailure == false)
 			{
@@ -152,6 +155,7 @@ int main(int argc, char* argv[])
 			unsigned char buffer[sizeof(iter->sendMsg)];
 			memcpy(&buffer, &iter->sendMsg, sizeof(iter->sendMsg));
 			
+			srand((unsigned)time(NULL));
 			bool responseFailure = (rand() % 100) < 10;//seed by time
 			if(responseFailure == false)
 			{
