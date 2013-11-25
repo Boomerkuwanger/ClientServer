@@ -16,6 +16,7 @@
 #include <linux/netdevice.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <time.h>
 
 #define ECHOMAX 255
 using namespace std;
@@ -81,6 +82,7 @@ int main(int argc, const char* argv[]) {
 		
 		if(r.req >= beginFailure)
 		{
+			srand((unsigned)time(NULL));
 			bool clientFailure = (rand() % 100) < 50; //may need seed by time
 			if(clientFailure == false)
 			{
