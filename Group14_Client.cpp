@@ -37,7 +37,6 @@ int main(int argc, const char* argv[]) {
     int respStringLen;               /* Length of received response */
     int successfulRequests = 0;
 
-	//GetIncarnationNumber();
     ValidateInputArguments(argc, argv[0]);
     serverIp = argv[1];
 	
@@ -53,9 +52,12 @@ int main(int argc, const char* argv[]) {
     memset(&echoServAddr, 0, sizeof(echoServAddr));    /* Zero out structure */
     echoServAddr.sin_family = AF_INET;                 /* Internet addr family */
     echoServAddr.sin_addr.s_addr = inet_addr(serverIp);  /* Server IP address */
-    echoServAddr.sin_port   = htons(echoServerPort);     /* Server port */
-	
+    echoServAddr.sin_port   = htons(echoServerPort);     /* Server port */;
+
+	srand((unsigned)time(NULL));
+
 	int beginFailure = (rand() % 20);
+	cout << beginFailure << endl;
 	while (successfulRequests < 20) 
 	{
 		struct requestf r;
@@ -82,9 +84,10 @@ int main(int argc, const char* argv[]) {
 		
 		if(r.req >= beginFailure)
 		{
-			srand((unsigned)time(NULL));
-			bool clientFailure = (rand() % 100) < 50; //may need seed by time
-			if(clientFailure == false)
+			int x = (rand() % 100);
+			bool clientFailure = x < 50; //may need seed by time
+			cout << "RANDOM NUMBER " << x << "  RESULT: " << clientFailure <<endl;
+			if(!clientFailure)
 			{
 				int sentdata = sendto(socketDescriptor, px, sizeof(r), 0, (struct sockaddr *)&echoServAddr, sizeof(echoServAddr));
 				if(sentdata == -1)
