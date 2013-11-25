@@ -112,14 +112,14 @@ int main(int argc, char* argv[])
 		bool Failure = (rand() % 100) < 10;//may need time seed
 		
 		/* These cases compare 'R' (client request number) to 'r' (server request number) */
-		if (newRequest.req < iter->requestNum&& Failure==false) {
-			printf("\ncase 1 \n");
+		if ((newRequest.req < iter->requestNum) && (!Failure)) {
+			printf("\nCase 1 \n");
 			
 			printf("The request from %d was ignored.\n", clientAddr.sin_addr);
 			printf("The client's request number (%d) was less than the server's request number (%d)\n\n", newRequest.req, iter->requestNum);
 			++iter->requestNum;
 		}
-		else if (newRequest.req == iter->requestNum&& Failure==false) {
+		else if ((newRequest.req == iter->requestNum) && (!Failure)) {
 			/* Send received datagram back to the client */
 			printf("\nCase 2 \n");
 			unsigned char buffer[sizeof(iter->sendMsg)];
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 			
 			srand((unsigned)time(NULL));
 			bool responseFailure = (rand() % 100) < 10;//seed by time
-			if(responseFailure == false)
+			if(!responseFailure)
 			{
 				int size = sendto(sock, buffer, sizeof(buffer), 0, 
 						(struct sockaddr *) &clientAddr, sizeof(clientAddr));
@@ -137,13 +137,12 @@ int main(int argc, char* argv[])
 					DieWithError("sendto() sent a different number of bytes than expected");
 			}
 			else
-			{
 				printf("The server performed the request but failed to return a response to client.");
-			}
+				
 			printf("The client's request number (%d) was equal to the server's request number (%d)\n\n", newRequest.req, iter->requestNum);
 			++iter->requestNum;
 		}
-		else if (newRequest.req > iter->requestNum&& Failure==false) {
+		else if ((newRequest.req > iter->requestNum) && (!Failure)) {
 			printf("\nCase 3 \n");
 			/* Modify the message to send back */			
 			iter->sendMsg[4] = iter->sendMsg[3]; //toAppend + iter->sendMsg;
@@ -157,23 +156,20 @@ int main(int argc, char* argv[])
 			
 			srand((unsigned)time(NULL));
 			bool responseFailure = (rand() % 100) < 10;//seed by time
-			if(responseFailure == false)
+			if(!responseFailure)
 			{
 				if (sendto(sock, buffer, sizeof(buffer), 0, 
 					(struct sockaddr *) &clientAddr, sizeof(clientAddr)) != recvMsgSize)
 						DieWithError("sendto() sent a different number of bytes than expected");
 			}
 			else
-			{
 				printf("The server performed the request but failed to return a response to client.");
-			}
+				
 			printf("The client's request number (%d) was greater than the server's request number (%d)\n\n", newRequest.req, iter->requestNum);
 			++iter->requestNum;
 		}
-		else if(Failure==true)
-		{
+		else if(Failure)
 			printf("The server dropped the request");
-		}
 
 		/* Sort the client table in the interest of lookup times */
 		sort(clientTable.begin(), clientTable.end(), compareByClient);

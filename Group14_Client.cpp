@@ -55,7 +55,9 @@ int main(int argc, const char* argv[]) {
     echoServAddr.sin_addr.s_addr = inet_addr(serverIp);  /* Server IP address */
     echoServAddr.sin_port   = htons(echoServerPort);     /* Server port */
 	
+	srand((unsigned)time(NULL));
 	int beginFailure = (rand() % 20);
+	printf("beginFailure: %d", beginFailure)
 	while (successfulRequests < 20) 
 	{
 		struct requestf r;
@@ -84,7 +86,8 @@ int main(int argc, const char* argv[]) {
 		{
 			srand((unsigned)time(NULL));
 			bool clientFailure = (rand() % 100) < 50; //may need seed by time
-			if(clientFailure == false)
+			printf("clientFailure: %d", clientFailure)
+			if(!clientFailure)
 			{
 				int sentdata = sendto(socketDescriptor, px, sizeof(r), 0, (struct sockaddr *)&echoServAddr, sizeof(echoServAddr));
 				if(sentdata == -1)
