@@ -59,7 +59,7 @@ int main(int argc, const char* argv[]) {
 	while (successfulRequests < 20) 
 	{
 		struct requestf r;
-		r.inc = GetIncarnationNumber(false);
+		r.inc = 10;// GetIncarnationNumber(false);
 		r.client = atoi(argv[2]);
 		r.req = successfulRequests;
 		string s = GetAddresses(AF_INET);
@@ -111,6 +111,8 @@ int main(int argc, const char* argv[]) {
 			}
 			else
 			{
+				cout << "************************FAILED***************************" << endl;
+
 				GetIncarnationNumber(true);
 				printf("Client failed to send request.");
 				//increment incarnation number
@@ -210,6 +212,7 @@ int GetIncarnationNumber(bool setIncarnationNumber)
 		close(fd);
 		return currentIncarnationNumber;
 	}
+	return -1;
 }
 
 void ValidateInputArguments(int argc, const char* argv)

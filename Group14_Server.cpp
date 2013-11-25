@@ -119,15 +119,15 @@ int main(int argc, char* argv[])
 			printf("The client's request number (%d) was less than the server's request number (%d)\n\n", newRequest.req, iter->requestNum);
 			++iter->requestNum;
 		}
-		else if (newRequest.req == iter->requestNum&& Failure==false) {
+		else if (newRequest.req == iter->requestNum && Failure==false) {
 			/* Send received datagram back to the client */
 			printf("\nCase 2 \n");
 			unsigned char buffer[sizeof(iter->sendMsg)];
 			memcpy(&buffer, &iter->sendMsg, sizeof(iter->sendMsg));
-			cout << buffer << endl;
 			
 			srand((unsigned)time(NULL));
 			bool responseFailure = (rand() % 100) < 10;//seed by time
+			cout << responseFailure << endl;
 			if(responseFailure == false)
 			{
 				int size = sendto(sock, buffer, sizeof(buffer), 0, 
@@ -138,6 +138,8 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
+				cout << "************************FAILED***************************" << endl;
+
 				printf("The server performed the request but failed to return a response to client.");
 			}
 			printf("The client's request number (%d) was equal to the server's request number (%d)\n\n", newRequest.req, iter->requestNum);
@@ -159,6 +161,7 @@ int main(int argc, char* argv[])
 			bool responseFailure = (rand() % 100) < 10;//seed by time
 			if(responseFailure == false)
 			{
+				cout << "************************FAILED***************************" << endl;
 				if (sendto(sock, buffer, sizeof(buffer), 0, 
 					(struct sockaddr *) &clientAddr, sizeof(clientAddr)) != recvMsgSize)
 						DieWithError("sendto() sent a different number of bytes than expected");
